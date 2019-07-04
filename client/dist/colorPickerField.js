@@ -408,10 +408,13 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    // Set visibility after a short delay to prevent slider styling bugs
-    setTimeout(function () {
-      _this.visible = true;
-    }, 500);
+    // Wait for the element to become visible (get a "real width", render afterwards)
+    var interval = setInterval(function () {
+      if (_this.$el.getBoundingClientRect().width > 0) {
+        _this.visible = true;
+        clearInterval(interval);
+      }
+    }, 100);
   },
   computed: {
     colorObject: function colorObject() {

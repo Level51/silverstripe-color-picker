@@ -69,10 +69,13 @@ export default {
     }
   },
   mounted() {
-    // Set visibility after a short delay to prevent slider styling bugs
-    setTimeout(() => {
-      this.visible = true;
-    }, 500);
+    // Wait for the element to become visible (get a "real width", render afterwards)
+    const interval = setInterval(() => {
+      if (this.$el.getBoundingClientRect().width > 0) {
+        this.visible = true;
+        clearInterval(interval);
+      }
+    }, 100);
   },
   computed: {
     colorObject() {
@@ -142,10 +145,15 @@ export default {
       > div {
         display: flex;
         flex-direction: row-reverse;
-        width: auto;
+        width: 450px;
         background: none;
         box-shadow: none;
       }
+    }
+
+    canvas {
+      width: 250px;
+      height: 200px;
     }
   }
 }

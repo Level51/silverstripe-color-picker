@@ -350,9 +350,13 @@
 .verte.level51-verte-horizontal .verte__menu-origin > div {
   display: flex;
   flex-direction: row-reverse;
-  width: auto;
+  width: 450px;
   background: none;
   box-shadow: none;
+}
+.verte.level51-verte-horizontal canvas {
+  width: 250px;
+  height: 200px;
 }
 
 
