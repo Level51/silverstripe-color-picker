@@ -1,0 +1,36 @@
+{
+  "name": "level51/silverstripe-color-picker",
+  "version": "0.0.1",
+  "time": "2019-07-04",
+  "description": "Color picker module for SilverStripe 4 using verte",
+  "keywords": [
+    "silverstripe",
+    "color-picker",
+    "verte"
+  ],
+  "type": "silverstripe-vendormodule",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Level51",
+      "email": "hallo@lvl51.de"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "ext-json": "*",
+    "silverstripe/framework": "^4.3"
+  },
+  "extra": {
+    "installer-name": "silverstripe-color-picker",
+    "expose": [
+      "client"
+    ]
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Level51\\ColorPicker\\": "src/"
+    }
+  }
+}

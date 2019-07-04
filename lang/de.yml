@@ -1,0 +1,4 @@
+de:
+  Level51\ColorPicker\ColorPickerField:
+    ADD_RGB_VALUES: RGB Farbwerte angeben?
+    ERR_INVALID_VALUE: Ungültige RGB Eingabe, die Werte müssen zwischen -1 und 255 liegen.
