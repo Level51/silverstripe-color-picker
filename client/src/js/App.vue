@@ -52,16 +52,34 @@ export default {
   },
   data() {
     return {
+      /**
+       * Handle the visibility of the color picker itself.
+       *
+       * Used to control the time of rendering to prevent issues
+       * when rendered while in background.
+       */
       visible: false,
+
+      /**
+       * Whether RGB values should be added or not.
+       *
+       * The RGB values will be -1,-1,-1 if set to false.
+       */
       rgbValuesAvailable: false,
+
+      /**
+       * The color selected by the picker, in the format "rgb(r,g,b)"
+       */
       rgb: null
     };
   },
   components: { Verte },
   created() {
+    // Check for an existing value.
     if (this.payload.value) {
       const values = JSON.parse(this.payload.value);
 
+      // Check for valid RGB values, set the picker value and rgbValuesAvailable flag
       if (Object.values(values).filter(val => val >= 0 && val <= 255).length === 3) {
         this.rgb = `rgb(${values.R}, ${values.G}, ${values.B})`;
         this.rgbValuesAvailable = true;

@@ -2,8 +2,8 @@
 
 namespace Level51\ColorPicker;
 
-use SilverStripe\Core\Convert;
 use SilverStripe\Forms\FormField;
+use SilverStripe\Forms\Validator;
 use SilverStripe\View\Requirements;
 
 /**
@@ -28,7 +28,7 @@ class ColorPickerField extends FormField {
      * @return string
      */
     public function getPayload() {
-        return Convert::array2json([
+        return json_encode([
             'id'    => $this->ID(),
             'name'  => $this->getName(),
             'value' => $this->Value(),
@@ -63,18 +63,18 @@ class ColorPickerField extends FormField {
      * @return $this
      */
     public function setSubmittedValue($value, $data = null) {
-        return $this->setValue(Convert::array2json($value), $data);
+        return $this->setValue(json_encode($value), $data);
     }
 
     /**
      * Validate the input, ensure that each value is between -1 and 255.
      *
-     * @param \SilverStripe\Forms\Validator $validator
+     * @param Validator $validator
      *
      * @return bool
      */
     public function validate($validator) {
-        $values = $this->Value() ? Convert::json2array($this->Value()) : null;
+        $values = $this->Value() ? json_decode($this->Value(), true) : null;
 
         if (!$values) return true;
 
