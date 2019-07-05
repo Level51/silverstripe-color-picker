@@ -385,8 +385,24 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      /**
+       * Handle the visibility of the color picker itself.
+       *
+       * Used to control the time of rendering to prevent issues
+       * when rendered while in background.
+       */
       visible: false,
+
+      /**
+       * Whether RGB values should be added or not.
+       *
+       * The RGB values will be -1,-1,-1 if set to false.
+       */
       rgbValuesAvailable: false,
+
+      /**
+       * The color selected by the picker, in the format "rgb(r,g,b)"
+       */
       rgb: null
     };
   },
@@ -394,8 +410,9 @@ __webpack_require__.r(__webpack_exports__);
     Verte: verte__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   created: function created() {
+    // Check for an existing value.
     if (this.payload.value) {
-      var values = JSON.parse(this.payload.value);
+      var values = JSON.parse(this.payload.value); // Check for valid RGB values, set the picker value and rgbValuesAvailable flag
 
       if (Object.values(values).filter(function (val) {
         return val >= 0 && val <= 255;
