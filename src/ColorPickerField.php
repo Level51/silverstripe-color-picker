@@ -63,6 +63,11 @@ class ColorPickerField extends FormField {
      * @return $this
      */
     public function setSubmittedValue($value, $data = null) {
+        // trim whitespaces
+        foreach ($value as $key => $v) {
+            $value[$key] = trim($v);
+        }
+
         return $this->setValue(json_encode($value), $data);
     }
 
