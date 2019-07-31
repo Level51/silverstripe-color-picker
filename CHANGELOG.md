@@ -1,4 +1,4 @@
-[Unreleased]
+[0.1.1]
 ### Fixed
 - Trim whitespaces before saving new values
 

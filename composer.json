@@ -1,7 +1,7 @@
 {
   "name": "level51/silverstripe-color-picker",
-  "version": "0.1.0",
-  "time": "2019-07-05",
+  "version": "0.1.1",
+  "time": "2019-07-31",
   "description": "Color picker module for SilverStripe 4 using verte",
   "keywords": [
     "silverstripe",
