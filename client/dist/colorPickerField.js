@@ -411,7 +411,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     // Check for an existing value.
-    if (this.payload.value) {
+    if (this.payload.value && this.payload.value !== 'null') {
       var values = JSON.parse(this.payload.value); // Check for valid RGB values, set the picker value and rgbValuesAvailable flag
 
       if (Object.values(values).filter(function (val) {

@@ -76,7 +76,7 @@ export default {
   components: { Verte },
   created() {
     // Check for an existing value.
-    if (this.payload.value) {
+    if (this.payload.value && this.payload.value !== 'null') {
       const values = JSON.parse(this.payload.value);
 
       // Check for valid RGB values, set the picker value and rgbValuesAvailable flag
