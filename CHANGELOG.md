@@ -1,4 +1,4 @@
-## [Unreleased]
+## [0.1.3] - 2019-09-10
 ### Fixed
 - Check for "null" (as string) payload value before trying to parse json
 
