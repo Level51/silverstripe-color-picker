@@ -1,3 +1,7 @@
+## [0.1.3] - 2019-09-10
+### Fixed
+- Check for "null" (as string) payload value before trying to parse json
+
 ## [0.1.2] - 2019-08-19
 ### Fixed
 - Check if a value is given within the "setSubmittedValue" handler
