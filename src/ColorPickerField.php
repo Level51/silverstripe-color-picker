@@ -15,6 +15,11 @@ use SilverStripe\View\Requirements;
  */
 class ColorPickerField extends FormField {
 
+    /**
+     * @var bool Whether or not a "Add RGB color values" is shown.
+     */
+    private $showCheckbox = true;
+
     public function Field($properties = array()) {
         Requirements::javascript('level51/silverstripe-color-picker: client/dist/colorPickerField.js');
         Requirements::css('level51/silverstripe-color-picker: client/dist/colorPickerField.css');
@@ -29,10 +34,11 @@ class ColorPickerField extends FormField {
      */
     public function getPayload() {
         return json_encode([
-            'id'    => $this->ID(),
-            'name'  => $this->getName(),
-            'value' => $this->Value(),
-            'i18n'  => $this->getFrontendI18NPayload()
+            'id'           => $this->ID(),
+            'name'         => $this->getName(),
+            'value'        => $this->Value(),
+            'i18n'         => $this->getFrontendI18NPayload(),
+            'showCheckbox' => $this->showCheckbox
         ]);
     }
 
@@ -101,5 +107,16 @@ class ColorPickerField extends FormField {
         }
 
         return true;
+    }
+
+    /**
+     * Disable the "Add RGB color values" checkbox, so instantly show the color picker.
+     *
+     * @return $this
+     */
+    public function disableCheckbox() {
+        $this->showCheckbox = false;
+
+        return $this;
     }
 }
