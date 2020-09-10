@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div>
+    <div
+      v-if="showCheckbox">
       <input
         type="checkbox"
         v-model="rgbValuesAvailable">
@@ -75,6 +76,8 @@ export default {
   },
   components: { Verte },
   created() {
+    this.rgbValuesAvailable = !this.showCheckbox;
+
     // Check for an existing value.
     if (this.payload.value && this.payload.value !== 'null') {
       const values = JSON.parse(this.payload.value);
@@ -96,6 +99,11 @@ export default {
     }, 100);
   },
   computed: {
+    showCheckbox() {
+      if (typeof this.payload.showCheckbox === 'boolean') return this.payload.showCheckbox;
+
+      return true;
+    },
     colorObject() {
       // Special case if no value should be set, use -1,-1,-1 for this
       if (!this.rgbValuesAvailable) {
