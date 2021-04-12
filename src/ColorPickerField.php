@@ -13,14 +13,16 @@ use SilverStripe\View\Requirements;
  *
  * @package Level51\ColorPicker
  */
-class ColorPickerField extends FormField {
+class ColorPickerField extends FormField
+{
 
     /**
      * @var bool Whether or not a "Add RGB color values" is shown.
      */
     private $showCheckbox = true;
 
-    public function Field($properties = array()) {
+    public function Field($properties = array())
+    {
         Requirements::javascript('level51/silverstripe-color-picker: client/dist/colorPickerField.js');
         Requirements::css('level51/silverstripe-color-picker: client/dist/colorPickerField.css');
 
@@ -32,14 +34,17 @@ class ColorPickerField extends FormField {
      *
      * @return string
      */
-    public function getPayload() {
-        return json_encode([
-            'id'           => $this->ID(),
-            'name'         => $this->getName(),
-            'value'        => $this->Value(),
-            'i18n'         => $this->getFrontendI18NPayload(),
-            'showCheckbox' => $this->showCheckbox
-        ]);
+    public function getPayload()
+    {
+        return json_encode(
+            [
+                'id'           => $this->ID(),
+                'name'         => $this->getName(),
+                'value'        => $this->Value(),
+                'i18n'         => $this->getFrontendI18NPayload(),
+                'showCheckbox' => $this->showCheckbox
+            ]
+        );
     }
 
     /**
@@ -47,7 +52,8 @@ class ColorPickerField extends FormField {
      *
      * @return array
      */
-    public function getFrontendI18NPayload() {
+    public function getFrontendI18NPayload()
+    {
         $payload = [];
         $keys = [
             'ADD_RGB_VALUES'
@@ -68,8 +74,11 @@ class ColorPickerField extends FormField {
      *
      * @return $this
      */
-    public function setSubmittedValue($value, $data = null) {
-        if (!$value) return $this;
+    public function setSubmittedValue($value, $data = null)
+    {
+        if (!$value) {
+            return $this;
+        }
 
         // trim whitespaces
         foreach ($value as $key => $v) {
@@ -86,13 +95,18 @@ class ColorPickerField extends FormField {
      *
      * @return bool
      */
-    public function validate($validator) {
+    public function validate($validator)
+    {
         $values = $this->Value() ? json_decode($this->Value(), true) : null;
 
-        if (!$values) return true;
+        if (!$values) {
+            return true;
+        }
 
         foreach ($values as $value) {
-            if ($value === '') continue;
+            if ($value === '') {
+                continue;
+            }
 
             $number = intval($value);
             if (($number === 0 && ($value !== "0")) || is_null($number) || $number > 255 || $number < -1) {
@@ -114,7 +128,8 @@ class ColorPickerField extends FormField {
      *
      * @return $this
      */
-    public function disableCheckbox() {
+    public function disableCheckbox()
+    {
         $this->showCheckbox = false;
 
         return $this;
