@@ -1,4 +1,5 @@
 en:
   Level51\ColorPicker\ColorPickerField:
     ADD_RGB_VALUES: Add RGB color values?
-    ERR_INVALID_VALUE: Invalid RGB input, values must be set and between -1 and 255
+    ERR_INVALID_RGB_VALUE: Invalid RGB input, values must be set and between -1 and 255
+    ERR_INVALID_HEX_VALUE: 'Invalid Hex input, value must be a string with exactly 7 chars (e.g. #ff0000).'
