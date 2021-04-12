@@ -12,32 +12,41 @@
       v-if="rgbValuesAvailable && visible"
       class="level51-verte level51-verte-horizontal"
       picker="square"
-      model="rgb"
-      v-model="rgb"
+      :model="payload.mode"
+      v-model="inRgbMode ? rgb : simpleValue"
       :show-history="false"
       :draggable="false"
       :enable-alpha="false"
       :rgb-sliders="true"
       display="widget" />
 
-    <input
-      type="hidden"
-      :name="`${payload.name}[R]`"
-      min="0"
-      max="255"
-      :value="colorObject.r">
-    <input
-      type="hidden"
-      :name="`${payload.name}[G]`"
-      min="0"
-      max="255"
-      :value="colorObject.g">
-    <input
-      type="hidden"
-      :name="`${payload.name}[B]`"
-      min="0"
-      max="255"
-      :value="colorObject.b">
+    <template v-if="inRgbMode">
+      <input
+        type="hidden"
+        :name="`${payload.name}[R]`"
+        min="0"
+        max="255"
+        :value="colorObject.r">
+      <input
+        type="hidden"
+        :name="`${payload.name}[G]`"
+        min="0"
+        max="255"
+        :value="colorObject.g">
+      <input
+        type="hidden"
+        :name="`${payload.name}[B]`"
+        min="0"
+        max="255"
+        :value="colorObject.b">
+    </template>
+
+    <template v-if="inHexMode">
+      <input
+        type="hidden"
+        :name="payload.name"
+        :value="rgbValuesAvailable ? simpleValue : null">
+    </template>
   </div>
 </template>
 
@@ -69,9 +78,13 @@ export default {
       rgbValuesAvailable: false,
 
       /**
-       * The color selected by the picker, in the format "rgb(r,g,b)"
+       * The color selected by the picker, in the format "rgb(r,g,b)".
+       * Only used if in rgb mode.
        */
-      rgb: null
+      rgb: null,
+
+      /** Simple value used e.g. in the hex mode */
+      simpleValue: null
     };
   },
   components: { Verte },
@@ -80,12 +93,19 @@ export default {
 
     // Check for an existing value.
     if (this.payload.value && this.payload.value !== 'null') {
-      const values = JSON.parse(this.payload.value);
+      if (this.inRgbMode) {
+        const values = JSON.parse(this.payload.value);
 
-      // Check for valid RGB values, set the picker value and rgbValuesAvailable flag
-      if (Object.values(values).filter(val => val >= 0 && val <= 255).length === 3) {
-        this.rgb = `rgb(${values.R}, ${values.G}, ${values.B})`;
+        // Check for valid RGB values, set the picker value and rgbValuesAvailable flag
+        if (Object.values(values).filter(val => val >= 0 && val <= 255).length === 3) {
+          this.rgb = `rgb(${values.R}, ${values.G}, ${values.B})`;
+          this.rgbValuesAvailable = true;
+        }
+      }
+
+      if (this.inHexMode) {
         this.rgbValuesAvailable = true;
+        this.simpleValue = this.payload.value;
       }
     }
   },
@@ -99,6 +119,12 @@ export default {
     }, 100);
   },
   computed: {
+    inRgbMode() {
+      return this.payload.mode === 'rgb';
+    },
+    inHexMode() {
+      return this.payload.mode === 'hex';
+    },
     showCheckbox() {
       if (typeof this.payload.showCheckbox === 'boolean') return this.payload.showCheckbox;
 

@@ -1,6 +1,6 @@
 {
   "name": "silverstripe-color-picker",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Color picker module for SilverStripe 4 using verte",
   "authors": {
     "name": "Level51",
