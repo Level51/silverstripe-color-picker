@@ -9,17 +9,24 @@ use SilverStripe\View\Requirements;
 /**
  * FormField showing a basic RGB color picker.
  *
- * The value will be stored in single database field as JSON string, e.g. {"R":"73","G":"128","B":"140"}.
+ * In RGB mode, the value will be stored in single database field as JSON string, e.g. {"R":"73","G":"128","B":"140"}.
+ * In Hex mode, the value will be a single string - so no manipulation needed here.
  *
  * @package Level51\ColorPicker
  */
 class ColorPickerField extends FormField
 {
 
+    public const MODE_RGB = 'rgb';
+    public const MODE_HEX = 'hex';
+
     /**
      * @var bool Whether or not a "Add RGB color values" is shown.
      */
     private $showCheckbox = true;
+
+    /** @var string The color picker mode */
+    private $mode = 'rgb';
 
     public function Field($properties = array())
     {
@@ -42,6 +49,7 @@ class ColorPickerField extends FormField
                 'name'         => $this->getName(),
                 'value'        => $this->Value(),
                 'i18n'         => $this->getFrontendI18NPayload(),
+                'mode'         => $this->mode,
                 'showCheckbox' => $this->showCheckbox
             ]
         );
@@ -66,15 +74,24 @@ class ColorPickerField extends FormField
         return $payload;
     }
 
+    public function setSubmittedValue($value, $data = null)
+    {
+        if ($this->mode === self::MODE_RGB) {
+            return $this->setSubmittedRGBValue($value, $data);
+        }
+
+        return parent::setSubmittedValue($value, $data);
+    }
+
     /**
-     * Turn the submitted value (array with 3 single values) into a JSON string for storage.
+     * Turn the submitted rgb value (array with 3 single values) into a JSON string for storage.
      *
      * @param array $value
      * @param null  $data
      *
      * @return $this
      */
-    public function setSubmittedValue($value, $data = null)
+    public function setSubmittedRGBValue($value, $data = null)
     {
         if (!$value) {
             return $this;
@@ -88,14 +105,27 @@ class ColorPickerField extends FormField
         return $this->setValue(json_encode($value), $data);
     }
 
+    public function validate($validator)
+    {
+        if ($this->mode === self::MODE_RGB) {
+            return $this->validateRGBMode($validator);
+        }
+
+        if ($this->mode === self::MODE_HEX) {
+            return $this->validateHexMode($validator);
+        }
+
+        return true;
+    }
+
     /**
-     * Validate the input, ensure that each value is between -1 and 255.
+     * Validate the input in RGB mode, ensure that each value is between -1 and 255.
      *
      * @param Validator $validator
      *
      * @return bool
      */
-    public function validate($validator)
+    private function validateRGBMode($validator)
     {
         $values = $this->Value() ? json_decode($this->Value(), true) : null;
 
@@ -112,12 +142,36 @@ class ColorPickerField extends FormField
             if (($number === 0 && ($value !== "0")) || is_null($number) || $number > 255 || $number < -1) {
                 $validator->validationError(
                     $this->getName(),
-                    _t(__CLASS__ . '.ERR_INVALID_VALUE'),
+                    _t(__CLASS__ . '.ERR_INVALID_RGB_VALUE'),
                     "validation"
                 );
 
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate the input in Hex mode, ensure that the value is a string with exactly 7 chars.
+     *
+     * @param Validator $validator
+     *
+     * @return bool
+     */
+    private function validateHexMode($validator)
+    {
+        $value = $this->Value();
+
+        if ($value && is_string($value) && strlen($value) !== 7) {
+            $validator->validationError(
+                $this->getName(),
+                _t(__CLASS__ . '.ERR_INVALID_HEX_VALUE'),
+                'validation'
+            );
+
+            return false;
         }
 
         return true;
@@ -131,6 +185,20 @@ class ColorPickerField extends FormField
     public function disableCheckbox()
     {
         $this->showCheckbox = false;
+
+        return $this;
+    }
+
+    /**
+     * Change the color picker mode, see MODE_ constants.
+     *
+     * @param string $mode
+     *
+     * @return $this
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
 
         return $this;
     }
